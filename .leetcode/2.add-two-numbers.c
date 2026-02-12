@@ -4,6 +4,13 @@
  * [2] Add Two Numbers
  */
 
+#include <stdlib.h>
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
+
 // @lc code=start
 /**
  * Definition for singly-linked list.
@@ -12,43 +19,42 @@
  *     struct ListNode *next;
  * };
  */
+
+
 struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
-    unsigned long long numero_1 = 0;
-    unsigned long long multiplicador = 1;  // 1, 10, 100, 1000...
+    int carry = 0;
 
-    while (l1 != NULL) 
+    struct ListNode* dummy = (struct ListNode*)malloc(sizeof(struct ListNode));
+
+    struct ListNode* current = dummy;
+    
+
+    while (l1 != NULL || l2 != NULL || carry != 0)
     {
-        numero_1 += l1->val * multiplicador;
-        multiplicador *= 10;
-        l1 = l1->next;
-    }
-
-    unsigned long long numero_2 = 0;
-    multiplicador = 1;
-    while (l2 != NULL)
-    {
-        numero_2 += l2->val * multiplicador;
-        multiplicador *= 10;
-        l2 = l2->next;
-    }
-
-    unsigned long long total = numero_1 + numero_2;
-
-    struct ListNode* dummy = malloc(sizeof(struct ListNode));
-    struct ListNode* atual = dummy;
-
-    do {
-        struct ListNode* novoNo = malloc(sizeof(struct ListNode));
-        novoNo->val = total % 10;    
-        novoNo->next = NULL;
         
-        atual->next = novoNo;
-        atual = novoNo;
-        
-        total /= 10;                 
-    } while (total > 0);
+        int val1 = (l1 != NULL) ? l1->val : 0;
+        int val2 = (l2 != NULL) ? l2->val : 0;
+        int sum = val1 + val2 + carry;
+        int digit = sum%10;
+        carry = sum/10;
 
-    return dummy->next;
+        struct ListNode* newNode = (struct ListNode*)malloc(sizeof(struct ListNode));
+
+        newNode->val = digit;
+        newNode->next = 0;
+        current->next = newNode;
+        current = newNode;
+        
+        if(l1 != NULL) l1 = l1->next;
+        if(l2 != NULL) l2 = l2->next;
+    }
+    
+    struct ListNode* result = dummy->next;
+    free(dummy);
+    return result;
+
+    return result;
+
 }
 // @lc code=end
 
